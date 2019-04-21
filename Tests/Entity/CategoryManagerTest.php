@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
  *
@@ -11,34 +12,23 @@
 namespace Sonata\ClassificationBundle\Tests\Entity;
 
 use Sonata\ClassificationBundle\Entity\CategoryManager;
+use Sonata\CoreBundle\Test\EntityManagerMockFactory;
 
 /**
- * Class CategoryManagerTest
- *
+ * Class CategoryManagerTest.
  */
 class CategoryManagerTest extends \PHPUnit_Framework_TestCase
 {
     protected function getCategoryManager($qbCallback)
     {
-        $query = $this->getMockForAbstractClass('Doctrine\ORM\AbstractQuery', array(), '', false, true, true, array('execute'));
-        $query->expects($this->any())->method('execute')->will($this->returnValue(true));
-
-        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')->disableOriginalConstructor()->getMock();
-        $qb->expects($this->any())->method('select')->will($this->returnValue($qb));
-        $qb->expects($this->any())->method('getQuery')->will($this->returnValue($query));
-
-        $qbCallback($qb);
-
-        $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
-        $repository->expects($this->any())->method('createQueryBuilder')->will($this->returnValue($qb));
-
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
-        $em->expects($this->any())->method('getRepository')->will($this->returnValue($repository));
+        $em = EntityManagerMockFactory::create($this, $qbCallback, array());
 
         $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
         $registry->expects($this->any())->method('getManagerForClass')->will($this->returnValue($em));
 
-        return new CategoryManager('Sonata\PageBundle\Entity\BaseCategory', $registry);
+        $contextManager = $this->getMock('Sonata\ClassificationBundle\Model\ContextManagerInterface');
+
+        return new CategoryManager('Sonata\PageBundle\Entity\BaseCategory', $registry, $contextManager);
     }
 
     public function testGetPager()
@@ -46,10 +36,12 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getCategoryManager(function ($qb) use ($self) {
-                $qb->expects($self->never())->method('andWhere');
-                $qb->expects($self->once())->method('setParameters')->with(array());
+                $qb->expects($self->exactly(1))->method('andWhere')->withConsecutive(
+                    array($self->equalTo('c.context = :context'))
+                );
+                $qb->expects($self->once())->method('setParameters')->with(array('context' => 'default'));
             })
-            ->getPager(array(), 1);
+            ->getPager(array('context' => 'default'), 1);
     }
 
     public function testGetPagerWithEnabledCategories()
@@ -57,11 +49,17 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getCategoryManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('c.enabled = :enabled'));
-                $qb->expects($self->once())->method('setParameters')->with(array('enabled' => true));
+                /* @var $self \PHPUnit_Framework_TestCase */
+                /* @var $qb \PHPUnit_Framework_MockObject_InvocationMocker */
+                $qb->expects($self->exactly(2))->method('andWhere')->withConsecutive(
+                    array($self->equalTo('c.context = :context')),
+                    array($self->equalTo('c.enabled = :enabled'))
+                );
+                $qb->expects($self->once())->method('setParameters')->with(array('enabled' => true, 'context' => 'default'));
             })
             ->getPager(array(
                 'enabled' => true,
+                'context' => 'default',
             ), 1);
     }
 
@@ -70,11 +68,17 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getCategoryManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('c.enabled = :enabled'));
-                $qb->expects($self->once())->method('setParameters')->with(array('enabled' => false));
+                /* @var $self \PHPUnit_Framework_TestCase */
+                /* @var $qb \PHPUnit_Framework_MockObject_InvocationMocker */
+                $qb->expects($self->exactly(2))->method('andWhere')->withConsecutive(
+                    array($self->equalTo('c.context = :context')),
+                    array($self->equalTo('c.enabled = :enabled'))
+                );
+                $qb->expects($self->once())->method('setParameters')->with(array('enabled' => false, 'context' => 'default'));
             })
             ->getPager(array(
                 'enabled' => false,
+                'context' => 'default',
             ), 1);
     }
 }

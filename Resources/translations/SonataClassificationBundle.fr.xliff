@@ -26,6 +26,10 @@
                 <source>breadcrumb.link_category_list</source>
                 <target>Liste des catégories</target>
             </trans-unit>
+            <trans-unit id="breadcrumb.link_category_tree">
+                <source>breadcrumb.link_category_tree</source>
+                <target>Catégorie</target>
+            </trans-unit>
             <trans-unit id="list.label_name">
                 <source>list.label_name</source>
                 <target>Libellé</target>
@@ -44,7 +48,7 @@
             </trans-unit>
             <trans-unit id="filter.label_name">
                 <source>filter.label_name</source>
-                <target>Filtre</target>
+                <target>Libellé</target>
             </trans-unit>
             <trans-unit id="filter.label_enabled">
                 <source>filter.label_enabled</source>
@@ -109,6 +113,58 @@
             <trans-unit id="form.label_media">
                 <source>form.label_media</source>
                 <target>Media</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_context_list">
+                <source>breadcrumb.link_context_list</source>
+                <target>Contexts</target>
+            </trans-unit>
+            <trans-unit id="list.label_id">
+                <source>list.label_id</source>
+                <target>Code</target>
+            </trans-unit>
+            <trans-unit id="filter.label_id">
+                <source>filter.label_id</source>
+                <target>Code</target>
+            </trans-unit>
+            <trans-unit id="label_contexts">
+                <source>label_contexts</source>
+                <target>Contexts</target>
+            </trans-unit>
+            <trans-unit id="form.label_id">
+                <source>form.label_id</source>
+                <target>Code</target>
+            </trans-unit>
+            <trans-unit id="filter.label_context">
+                <source>filter.label_context</source>
+                <target>Context</target>
+            </trans-unit>
+            <trans-unit id="list.label_context">
+                <source>list.label_context</source>
+                <target>Context</target>
+            </trans-unit>
+            <trans-unit id="tree_catalog_title">
+                <source>tree_catalog_title</source>
+                <target>Catégories</target>
+            </trans-unit>
+            <trans-unit id="element.tree_site_label">
+                <source>element.tree_site_label</source>
+                <target>Catégories</target>
+            </trans-unit>
+            <trans-unit id="classification.list_mode">
+                <source>classification.list_mode</source>
+                <target>Liste</target>
+            </trans-unit>
+            <trans-unit id="classification.tree_mode">
+                <source>classification.tree_mode</source>
+                <target>Arbre</target>
+            </trans-unit>
+            <trans-unit id="active">
+                <source>active</source>
+                <target>Actif</target>
+            </trans-unit>
+            <trans-unit id="disabled">
+                <source>disabled</source>
+                <target>Désactivé</target>
             </trans-unit>
         </body>
     </file>

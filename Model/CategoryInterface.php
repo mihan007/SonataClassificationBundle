@@ -16,110 +16,110 @@ use Sonata\MediaBundle\Model\MediaInterface;
 interface CategoryInterface
 {
     /**
-     * @param $name
+     * Set name.
      *
-     * @return mixed
+     * @param string $name
      */
     public function setName($name);
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string $name
      */
     public function getName();
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param boolean $enabled
+     * @param bool $enabled
      */
     public function setEnabled($enabled);
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return boolean $enabled
+     * @return bool $enabled
      */
     public function getEnabled();
 
     /**
-     * Set slug
+     * Set slug.
      *
-     * @param integer $slug
+     * @param int $slug
      */
     public function setSlug($slug);
 
     /**
-     * Get slug
+     * Get slug.
      *
-     * @return integer $slug
+     * @return int $slug
      */
     public function getSlug();
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      */
     public function setDescription($description);
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string $description
      */
     public function getDescription();
 
     /**
-     * @param integer $position
+     * @param int $position
      */
     public function setPosition($position);
 
     /**
-     * @return integer
+     * @return int
      */
     public function getPosition();
 
     /**
-     * Add Children
+     * Add Children.
      *
      * @param CategoryInterface $children
-     * @param boolean           $nested
+     * @param bool              $nested
      */
     public function addChild(CategoryInterface $children, $nested = false);
 
     /**
-     * Get Children
+     * Get Children.
      *
-     * @return \Doctrine\Common\Collections\Collection $children
+     * @return Collection $children
      */
     public function getChildren();
 
     /**
-     * Set children
+     * Set children.
      *
      * @param $children
      */
     public function setChildren($children);
 
     /**
-     * Return true if category has children
+     * Return true if category has children.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasChildren();
 
     /**
-     * Set Parent
+     * Set Parent.
      *
      * @param CategoryInterface $parent
-     * @param boolean           $nested
+     * @param bool              $nested
      */
     public function setParent(CategoryInterface $parent = null, $nested = false);
 
     /**
-     * Get Parent
+     * Get Parent.
      *
      * @return CategoryInterface $parent
      */
@@ -134,4 +134,14 @@ interface CategoryInterface
      * @return MediaInterface
      */
     public function getMedia();
+
+    /**
+     * @param ContextInterface $context
+     */
+    public function setContext(ContextInterface $context);
+
+    /**
+     * @return ContextInterface
+     */
+    public function getContext();
 }

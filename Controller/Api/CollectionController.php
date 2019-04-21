@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
  *
@@ -8,28 +9,24 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Sonata\ClassificationBundle\Controller\Api;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-
 use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
+use Sonata\ClassificationBundle\Model\CollectionInterface;
+use Sonata\ClassificationBundle\Model\CollectionManagerInterface;
 use Sonata\CoreBundle\Form\FormHelper;
 use Sonata\DatagridBundle\Pager\PagerInterface;
-use Sonata\ClassificationBundle\Model\CollectionManagerInterface;
-
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CollectionController
+ * Class CollectionController.
  *
  * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
@@ -46,7 +43,7 @@ class CollectionController
     protected $formFactory;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param CollectionManagerInterface $collectionManager
      * @param FormFactoryInterface       $formFactory
@@ -58,7 +55,7 @@ class CollectionController
     }
 
     /**
-     * Retrieves the list of collections (paginated) based on criteria
+     * Retrieves the list of collections (paginated) based on criteria.
      *
      * @ApiDoc(
      *  resource=true,
@@ -87,7 +84,7 @@ class CollectionController
     }
 
     /**
-     * Retrieves a specific collection
+     * Retrieves a specific collection.
      *
      * @ApiDoc(
      *  requirements={
@@ -104,7 +101,7 @@ class CollectionController
      *
      * @param $id
      *
-     * @return Collection
+     * @return CollectionInterface
      */
     public function getCollectionAction($id)
     {
@@ -112,7 +109,7 @@ class CollectionController
     }
 
     /**
-     * Adds a collection
+     * Adds a collection.
      *
      * @ApiDoc(
      *  input={"class"="sonata_classification_api_form_collection", "name"="", "groups"={"sonata_api_write"}},
@@ -126,7 +123,7 @@ class CollectionController
      *
      * @param Request $request A Symfony request
      *
-     * @return Collection
+     * @return CollectionInterface
      *
      * @throws NotFoundHttpException
      */
@@ -136,7 +133,7 @@ class CollectionController
     }
 
     /**
-     * Updates a collection
+     * Updates a collection.
      *
      * @ApiDoc(
      *  requirements={
@@ -151,10 +148,10 @@ class CollectionController
      *  }
      * )
      *
-     * @param integer $id      A Collection identifier
+     * @param int     $id      A Collection identifier
      * @param Request $request A Symfony request
      *
-     * @return Collection
+     * @return CollectionInterface
      *
      * @throws NotFoundHttpException
      */
@@ -164,7 +161,7 @@ class CollectionController
     }
 
     /**
-     * Deletes a collection
+     * Deletes a collection.
      *
      * @ApiDoc(
      *  requirements={
@@ -177,9 +174,9 @@ class CollectionController
      *  }
      * )
      *
-     * @param integer $id A Collection identifier
+     * @param int $id A Collection identifier
      *
-     * @return \FOS\RestBundle\View\View
+     * @return View
      *
      * @throws NotFoundHttpException
      */
@@ -193,7 +190,7 @@ class CollectionController
     }
 
     /**
-     * Filters criteria from $paramFetcher to be compatible with the Pager criteria
+     * Filters criteria from $paramFetcher to be compatible with the Pager criteria.
      *
      * @param ParamFetcherInterface $paramFetcher
      *
@@ -215,11 +212,11 @@ class CollectionController
     }
 
     /**
-     * Retrieves collection with id $id or throws an exception if it doesn't exist
+     * Retrieves collection with id $id or throws an exception if it doesn't exist.
      *
-     * @param integer $id A Collection identifier
+     * @param int $id A Collection identifier
      *
-     * @return Collection
+     * @return CollectionInterface
      *
      * @throws NotFoundHttpException
      */
@@ -235,24 +232,24 @@ class CollectionController
     }
 
     /**
-     * Write a collection, this method is used by both POST and PUT action methods
+     * Write a collection, this method is used by both POST and PUT action methods.
      *
-     * @param Request      $request Symfony request
-     * @param integer|null $id      A collection identifier
+     * @param Request  $request Symfony request
+     * @param int|null $id      A collection identifier
      *
-     * @return \FOS\RestBundle\View\View|FormInterface
+     * @return View|FormInterface
      */
     protected function handleWriteCollection($request, $id = null)
     {
         $collection = $id ? $this->getCollection($id) : null;
 
         $form = $this->formFactory->createNamed(null, 'sonata_classification_api_form_collection', $collection, array(
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ));
 
         FormHelper::removeFields($request->request->all(), $form);
 
-        $form->bind($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $collection = $form->getData();

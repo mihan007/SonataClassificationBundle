@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Sonata package.
  *
@@ -8,28 +9,24 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Sonata\ClassificationBundle\Controller\Api;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-
 use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
+use Sonata\ClassificationBundle\Model\TagInterface;
+use Sonata\ClassificationBundle\Model\TagManagerInterface;
 use Sonata\CoreBundle\Form\FormHelper;
 use Sonata\DatagridBundle\Pager\PagerInterface;
-use Sonata\ClassificationBundle\Model\TagManagerInterface;
-
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class TagController
+ * Class TagController.
  *
  * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
@@ -46,7 +43,7 @@ class TagController
     protected $formFactory;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param TagManagerInterface  $tagManager
      * @param FormFactoryInterface $formFactory
@@ -58,7 +55,7 @@ class TagController
     }
 
     /**
-     * Retrieves the list of tags (paginated) based on criteria
+     * Retrieves the list of tags (paginated) based on criteria.
      *
      * @ApiDoc(
      *  resource=true,
@@ -87,7 +84,7 @@ class TagController
     }
 
     /**
-     * Retrieves a specific tag
+     * Retrieves a specific tag.
      *
      * @ApiDoc(
      *  requirements={
@@ -112,7 +109,7 @@ class TagController
     }
 
     /**
-     * Adds a tag
+     * Adds a tag.
      *
      * @ApiDoc(
      *  input={"class"="sonata_classification_api_form_tag", "name"="", "groups"={"sonata_api_write"}},
@@ -126,7 +123,7 @@ class TagController
      *
      * @param Request $request A Symfony request
      *
-     * @return Tag
+     * @return TagInterface
      *
      * @throws NotFoundHttpException
      */
@@ -136,7 +133,7 @@ class TagController
     }
 
     /**
-     * Updates a tag
+     * Updates a tag.
      *
      * @ApiDoc(
      *  requirements={
@@ -151,10 +148,10 @@ class TagController
      *  }
      * )
      *
-     * @param integer $id      A Tag identifier
+     * @param int     $id      A Tag identifier
      * @param Request $request A Symfony request
      *
-     * @return Tag
+     * @return TagInterface
      *
      * @throws NotFoundHttpException
      */
@@ -164,7 +161,7 @@ class TagController
     }
 
     /**
-     * Deletes a tag
+     * Deletes a tag.
      *
      * @ApiDoc(
      *  requirements={
@@ -177,9 +174,9 @@ class TagController
      *  }
      * )
      *
-     * @param integer $id A Tag identifier
+     * @param int $id A Tag identifier
      *
-     * @return \FOS\RestBundle\View\View
+     * @return View
      *
      * @throws NotFoundHttpException
      */
@@ -193,7 +190,7 @@ class TagController
     }
 
     /**
-     * Filters criteria from $paramFetcher to be compatible with the Pager criteria
+     * Filters criteria from $paramFetcher to be compatible with the Pager criteria.
      *
      * @param ParamFetcherInterface $paramFetcher
      *
@@ -215,11 +212,11 @@ class TagController
     }
 
     /**
-     * Retrieves tag with id $id or throws an exception if it doesn't exist
+     * Retrieves tag with id $id or throws an exception if it doesn't exist.
      *
-     * @param integer $id A Tag identifier
+     * @param int $id A Tag identifier
      *
-     * @return Tag
+     * @return TagInterface
      *
      * @throws NotFoundHttpException
      */
@@ -235,24 +232,24 @@ class TagController
     }
 
     /**
-     * Write a tag, this method is used by both POST and PUT action methods
+     * Write a tag, this method is used by both POST and PUT action methods.
      *
-     * @param Request      $request Symfony request
-     * @param integer|null $id      A tag identifier
+     * @param Request  $request Symfony request
+     * @param int|null $id      A tag identifier
      *
-     * @return \FOS\RestBundle\View\View|FormInterface
+     * @return FormInterface
      */
     protected function handleWriteTag($request, $id = null)
     {
         $tag = $id ? $this->getTag($id) : null;
 
         $form = $this->formFactory->createNamed(null, 'sonata_classification_api_form_tag', $tag, array(
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ));
 
         FormHelper::removeFields($request->request->all(), $form);
 
-        $form->bind($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $tag = $form->getData();

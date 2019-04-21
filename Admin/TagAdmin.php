@@ -9,21 +9,23 @@
  * file that was distributed with this source code.
  */
 
-    namespace Sonata\ClassificationBundle\Admin;
+namespace Sonata\ClassificationBundle\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class TagAdmin extends Admin
+class TagAdmin extends ContextAwareAdmin
 {
     /**
      * {@inheritdoc}
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('name');
+        $formMapper
+            ->add('name')
+            ->add('context')
+        ;
 
         if ($this->hasSubject() && $this->getSubject()->getId()) {
             $formMapper->add('slug');
@@ -37,6 +39,8 @@ class TagAdmin extends Admin
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        parent::configureDatagridFilters($datagridMapper);
+
         $datagridMapper
             ->add('name')
             ->add('enabled')
@@ -51,6 +55,9 @@ class TagAdmin extends Admin
         $listMapper
             ->addIdentifier('name')
             ->add('slug')
+            ->add('context', null, array(
+                'sortable' => 'context.name',
+            ))
             ->add('enabled', null, array('editable' => true))
             ->add('createdAt')
             ->add('updatedAt')

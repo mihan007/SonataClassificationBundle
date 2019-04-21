@@ -11,9 +11,8 @@
 
 namespace Sonata\ClassificationBundle\Document;
 
-use Sonata\CoreBundle\Model\BaseDocumentManager;
 use Sonata\ClassificationBundle\Model\CollectionManagerInterface;
-
+use Sonata\CoreBundle\Model\BaseDocumentManager;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
 use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
 
@@ -22,7 +21,7 @@ class CollectionManager extends BaseDocumentManager implements CollectionManager
     /**
      * {@inheritdoc}
      */
-    public function getPager(array $criteria, $page, $maxPerPage = 10)
+    public function getPager(array $criteria, $page, $limit = 10, array $sort = array())
     {
         $parameters = array();
 
@@ -37,7 +36,7 @@ class CollectionManager extends BaseDocumentManager implements CollectionManager
         $query->setParameters($parameters);
 
         $pager = new Pager();
-        $pager->setMaxPerPage($maxPerPage);
+        $pager->setMaxPerPage($limit);
         $pager->setQuery(new ProxyQuery($query));
         $pager->setPage($page);
         $pager->init();

@@ -11,29 +11,52 @@
 
 namespace Sonata\ClassificationBundle\Model;
 
-use Sonata\ClassificationBundle\Model\Tag;
 use Sonata\MediaBundle\Model\MediaInterface;
 
 abstract class Collection implements CollectionInterface
 {
+    /**
+     * @var string
+     */
     protected $name;
 
+    /**
+     * @var string
+     */
     protected $slug;
 
+    /**
+     * @var bool
+     */
     protected $enabled;
 
+    /**
+     * @var string
+     */
     protected $description;
 
+    /**
+     * @var \DateTime
+     */
     protected $createdAt;
 
+    /**
+     * @var \DateTime
+     */
     protected $updatedAt;
 
+    /**
+     * @var MediaInterface
+     */
     protected $media;
 
     /**
-     * Set name
-     *
-     * @param string $name
+     * @var ContextInterface
+     */
+    protected $context;
+
+    /**
+     * {@inheritdoc}
      */
     public function setName($name)
     {
@@ -43,9 +66,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Get name
-     *
-     * @return string $name
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -53,9 +74,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Set enabled
-     *
-     * @param boolean $enabled
+     * {@inheritdoc}
      */
     public function setEnabled($enabled)
     {
@@ -63,9 +82,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Get enabled
-     *
-     * @return boolean $enabled
+     * {@inheritdoc}
      */
     public function getEnabled()
     {
@@ -73,9 +90,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Set slug
-     *
-     * @param integer $slug
+     * {@inheritdoc}
      */
     public function setSlug($slug)
     {
@@ -83,9 +98,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Get slug
-     *
-     * @return integer $slug
+     * {@inheritdoc}
      */
     public function getSlug()
     {
@@ -93,9 +106,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Set description
-     *
-     * @param string $description
+     * {@inheritdoc}
      */
     public function setDescription($description)
     {
@@ -103,9 +114,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * Get description
-     *
-     * @return string $description
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -122,13 +131,13 @@ abstract class Collection implements CollectionInterface
 
     public function prePersist()
     {
-        $this->setCreatedAt(new \DateTime);
-        $this->setUpdatedAt(new \DateTime);
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
     }
 
     public function preUpdate()
     {
-        $this->setUpdatedAt(new \DateTime);
+        $this->setUpdatedAt(new \DateTime());
     }
 
     /**
@@ -164,7 +173,7 @@ abstract class Collection implements CollectionInterface
     }
 
     /**
-     * @param MediaInterface $media
+     * {@inheritdoc}
      */
     public function setMedia(MediaInterface $media = null)
     {
@@ -177,5 +186,21 @@ abstract class Collection implements CollectionInterface
     public function getMedia()
     {
         return $this->media;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContext(ContextInterface $context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * @return ContextInterface
+     */
+    public function getContext()
+    {
+        return $this->context;
     }
 }

@@ -11,19 +11,37 @@
 
 namespace Sonata\ClassificationBundle\Model;
 
-use Sonata\ClassificationBundle\Model\TagInterface;
-
 abstract class Tag implements TagInterface
 {
+    /**
+     * @var string
+     */
     protected $name;
 
+    /**
+     * @var string
+     */
     protected $slug;
 
+    /**
+     * @var \DateTime
+     */
     protected $createdAt;
 
+    /**
+     * @var \DateTime
+     */
     protected $updatedAt;
 
+    /**
+     * @var bool
+     */
     protected $enabled;
+
+    /**
+     * @var ContextInterface
+     */
+    protected $context;
 
     /**
      * {@inheritdoc}
@@ -109,11 +127,11 @@ abstract class Tag implements TagInterface
 
     public function preUpdate()
     {
-        $this->setUpdatedAt(new \DateTime);
+        $this->setUpdatedAt(new \DateTime());
     }
 
     /**
-     * source : http://snipplr.com/view/22741/slugify-a-string-in-php/
+     * source : http://snipplr.com/view/22741/slugify-a-string-in-php/.
      *
      * @static
      *
@@ -153,5 +171,21 @@ abstract class Tag implements TagInterface
     public function __toString()
     {
         return $this->getName() ?: 'n/a';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContext(ContextInterface $context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContext()
+    {
+        return $this->context;
     }
 }

@@ -12,31 +12,64 @@
 namespace Sonata\ClassificationBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Sonata\ClassificationBundle\Model\CategoryInterface;
-use Sonata\ClassificationBundle\Model\Tag;
 use Sonata\MediaBundle\Model\MediaInterface;
 
 abstract class Category implements CategoryInterface
 {
+    /**
+     * @var string
+     */
     protected $name;
 
+    /**
+     * @var string
+     */
     protected $slug;
 
+    /**
+     * @var bool
+     */
     protected $enabled;
 
+    /**
+     * @var string
+     */
     protected $description;
 
+    /**
+     * @var \DateTime
+     */
     protected $createdAt;
 
+    /**
+     * @var \DateTime
+     */
     protected $updatedAt;
 
+    /**
+     * @var int
+     */
     protected $position;
 
+    /**
+     * @var CategoryInterface[]
+     */
     protected $children;
 
+    /**
+     * @var CategoryInterface
+     */
     protected $parent;
 
+    /**
+     * @var MediaInterface
+     */
     protected $media;
+
+    /**
+     * @var ContextInterface
+     */
+    protected $context;
 
     /**
      * {@inheritdoc}
@@ -109,18 +142,18 @@ abstract class Category implements CategoryInterface
      */
     public function __toString()
     {
-        return $this->getName() ? : 'n/a';
+        return $this->getName() ?: 'n/a';
     }
 
     public function prePersist()
     {
-        $this->setCreatedAt(new \DateTime);
-        $this->setUpdatedAt(new \DateTime);
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
     }
 
     public function preUpdate()
     {
-        $this->setUpdatedAt(new \DateTime);
+        $this->setUpdatedAt(new \DateTime());
     }
 
     /**
@@ -187,6 +220,10 @@ abstract class Category implements CategoryInterface
     public function addChild(CategoryInterface $child, $nested = false)
     {
         $this->children[] = $child;
+
+        if ($this->getContext()) {
+            $child->setContext($this->getContext());
+        }
 
         if (!$nested) {
             $child->setParent($this, true);
@@ -275,5 +312,21 @@ abstract class Category implements CategoryInterface
     public function getMedia()
     {
         return $this->media;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContext(ContextInterface $context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContext()
+    {
+        return $this->context;
     }
 }
